@@ -327,4 +327,3 @@ exports.delete = function (param, type, message) {
     });
   }
 };
-

@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
-const { Redundancy } = require('../../src/')
+const { Redundancy } = require('../')
+const uniqueValidator = require('mongoose-unique-validator')
 
 const userSchema = new mongoose.Schema({
     name: String,
-    username: String,
+    username: { type: String, unique: true },
     password: String
 })
+userSchema.plugin(uniqueValidator)
 
 mongoose.model('Account', userSchema)
 

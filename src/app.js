@@ -32,6 +32,4 @@ class App {
   }
 }
 
-exports.App = App
-
-exports.Redundancy = require('./redundancy')
+module.exports = App

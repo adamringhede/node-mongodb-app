@@ -1,10 +1,11 @@
 const ObjectId = require('objectid');
 const crypto = require('crypto');
 const mongoose = require('mongoose')
+const { OAuthClient, OAuthRefreshToken, OAuthAccessToken } = require('../models')
 
 
 exports.getAccessToken = function (bearerToken, callback) {
-  mongoose.model('OAuthAccessToken')
+  OAuthAccessToken
   .findOne({ token: bearerToken })
   .populate('holder')
   .exec(function (err, model) {
@@ -17,7 +18,11 @@ exports.getAccessToken = function (bearerToken, callback) {
 };
 
 exports.getClient = function (clientId, clientSecret, callback) {
-  mongoose.model('OAuthClient').findOne({ client_id: clientId, secret: clientSecret }, callback);
+  const query = { client_id: clientId }
+  if (clientSecret != null) {
+    query.secret = clientSecret
+  }
+  mongoose.model('OAuthClient').findOne(query, callback);
 };
 
 
@@ -31,8 +36,7 @@ exports.grantTypeAllowed = function (clientId, grantType, callback) {
 };
 
 exports.saveAccessToken = function (token, clientId, expires, userId, callback) {
-
-  var accessToken = new mongoose.model('OAuthAccessToken')({
+  var accessToken = new OAuthAccessToken({
     token: token,
     client_id: clientId,
     holder: userId,
@@ -47,7 +51,7 @@ exports.saveAccessToken = function (token, clientId, expires, userId, callback) 
  * Required to support password grant type
  */
 exports.getUser = function (username, password, callback) {
-  mongoose.model('Account').findWithCredentials({username:username, password:password}, function(err, user) {
+  mongoose.model('Account').findOne({username:username, password:password}, function(err, user) {
     if(err) return callback(err);
     callback(null, user);
   });
@@ -57,8 +61,7 @@ exports.getUser = function (username, password, callback) {
  * Required to support refreshToken grant type
  */
 exports.saveRefreshToken = function (token, clientId, expires, userId, callback) {
-
-  var refreshToken = new mongoose.model('OAuthRefreshToken')({
+  var refreshToken = new OAuthRefreshToken({
     token: token,
     client_id: clientId,
     holder: userId,
@@ -69,7 +72,7 @@ exports.saveRefreshToken = function (token, clientId, expires, userId, callback)
 };
 
 exports.getRefreshToken = function (refreshToken, callback) {
-  mongoose.model('OAuthRefreshToken').findOne({ token: refreshToken }, callback);
+  OAuthRefreshToken.findOne({ token: refreshToken }, callback);
 };
 
 

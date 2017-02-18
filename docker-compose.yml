@@ -3,15 +3,15 @@ services:
   web:
     image: node:7.2
     ports: 
-      - "9999:9999"
+      - "8000:8000"
     volumes: 
       - ./:/app
     environment:
-      PORT: '9999'
-      MONGO_URI: 'mongodb://mongodb:27017/polynect-test'
+      PORT: '8000'
+      MONGO_URI: 'mongodb://mongodb:27017/node-mongodb-app'
     depends_on:
       - mongodb
-    entrypoint: 'node /app'
+    entrypoint: 'node /app/example'
   mongodb:
     image: mongo:3.2
     volumes: 
