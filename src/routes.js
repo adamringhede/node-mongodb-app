@@ -6,17 +6,17 @@ module.exports = app => {
 
   app.publicRoutes.post('/v1/accounts/register',
     $.require('email', 'password'),
-    function(req, res, next) {
-      req.body.username = req.body.email;
-      next();
-    },
+    req => req.body.username = req.body.email,
     $.create('account', 'Account', {
       _: 'username password email',
       admin: 'username password email role'
     }),
     //$.createAccessToken('account', Models.Client.DEV_PORTAL),
-    $.output('account', (model, res) => {
-      username: model.username
+    $.output('account', (model, req) => {
+      return {
+        _id: model._id,
+        username: model.username
+      }
     })
   );
 
