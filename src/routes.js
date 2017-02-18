@@ -5,7 +5,7 @@ module.exports = app => {
   const $ = app.mw
 
   app.publicRoutes.post('/v1/accounts/register',
-    $.require('email', 'password'),
+    $.require('email password'),
     req => req.body.username = req.body.email,
     $.create('account', 'Account', {
       _: 'username password email',
