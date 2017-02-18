@@ -3,7 +3,7 @@ const views = {
   Article: (model, req) => {
       return {
           title: model.title,
-          body: modle.boty,
+          body: model.body,
           author: model.author
       }
   }
@@ -22,12 +22,13 @@ module.exports = app => {
       $.output('article', views.Article)
   )
 
-  app.routes.post('/v1/articles',
-      $.default({
-          author: req => req.user._id
-      }),
-      $.create('article', {
-          user: 'title body author'
+  app.routes.post('/v1/articles', 
+      (req, res, next) => {
+        req.body.author = req.user._id
+        next()
+      },
+      $.create('article', 'Article', {
+          _: 'title body author'
       }),
       $.output('article', views.Article)
   )

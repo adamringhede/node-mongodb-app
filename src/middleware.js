@@ -45,7 +45,7 @@ exports.output = function (resource, view, populate = []) {
 exports.create = function (param, type, permissions, defaults) {
   return function (req, res, next) {
     var role;
-    if (req.user) {
+    if (req.user && req.user.role) {
       role = req.user.role;
     } else {
       role = '_';

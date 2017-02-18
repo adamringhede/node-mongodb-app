@@ -3,14 +3,6 @@ const flatten = require('flat');
 module.exports = function () {
   return function (req, res, next) {
     req.query = flatten(req.query);
-    // If one were to query on an id directly, then it would not be found
-    // since internally we use _id as the id.
-    /*
-    This does not apply
-    if ('id' in req.query) {
-      req.query._id = req.query.id;
-      delete req.query.id;
-    }*/
     for (key in req.query) {
       if (typeof req.query[key] !== 'string') {
         continue;

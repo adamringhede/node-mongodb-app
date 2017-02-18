@@ -20,7 +20,7 @@ const tokenSchema = new mongoose.Schema({
     token: { type: String, index: true, unique: true },
     expires: { type: Date, default: null },
     clientId: String,
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'Account' }
+    holder: { type: mongoose.Schema.Types.ObjectId, ref: 'Account' }
 })
 
 tokenSchema.pre('save', function(next) {

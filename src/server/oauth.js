@@ -39,7 +39,7 @@ exports.saveAccessToken = function (token, clientId, expires, userId, callback) 
   var accessToken = new OAuthAccessToken({
     token: token,
     clientId: clientId,
-    userId: userId,
+    holder: userId,
     expires: expires
   });
 
@@ -51,7 +51,7 @@ exports.saveAccessToken = function (token, clientId, expires, userId, callback) 
  * Required to support password grant type
  */
 exports.getUser = function (username, password, callback) {
-  mongoose.model('Account').findOne({username:username, password:password}, function(err, user) {
+  mongoose.model('Account').findWithCredentials({username:username, password:password}, function(err, user) {
     if(err) return callback(err);
     callback(null, user);
   });
