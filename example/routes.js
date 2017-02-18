@@ -24,10 +24,7 @@ module.exports = app => {
   )
 
   app.routes.post('/v1/articles', 
-      (req, res, next) => {
-        req.body.author = req.user._id
-        next()
-      },
+      req => req.body.author = req.user._id,
       $.create('article', 'Article', {
           _: 'title body author'
       }),
