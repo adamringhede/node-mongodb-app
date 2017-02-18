@@ -1,0 +1,21 @@
+version: '2'
+services: 
+  web:
+    image: node:7.2
+    ports: 
+      - "9999:9999"
+    volumes: 
+      - ./:/app
+    environment:
+      PORT: '9999'
+      MONGO_URI: 'mongodb://mongodb:27017/polynect-test'
+    depends_on:
+      - mongodb
+    entrypoint: 'node /app'
+  mongodb:
+    image: mongo:3.2
+    volumes: 
+      - /data/db
+    hostname: mongodb
+    ports:
+      - "27017:27017"
