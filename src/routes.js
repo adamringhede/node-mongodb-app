@@ -16,7 +16,7 @@ module.exports = app => {
     }),
     //$.createAccessToken('account', Models.Client.DEV_PORTAL),
     $.output('account', (model, res) => {
-        username: model.username
+      username: model.username
     })
   );
 

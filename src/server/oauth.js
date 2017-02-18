@@ -18,7 +18,7 @@ exports.getAccessToken = function (bearerToken, callback) {
 };
 
 exports.getClient = function (clientId, clientSecret, callback) {
-  const query = { client_id: clientId }
+  const query = { clientId: clientId }
   if (clientSecret != null) {
     query.secret = clientSecret
   }
@@ -38,8 +38,8 @@ exports.grantTypeAllowed = function (clientId, grantType, callback) {
 exports.saveAccessToken = function (token, clientId, expires, userId, callback) {
   var accessToken = new OAuthAccessToken({
     token: token,
-    client_id: clientId,
-    holder: userId,
+    clientId: clientId,
+    userId: userId,
     expires: expires
   });
 
@@ -63,7 +63,7 @@ exports.getUser = function (username, password, callback) {
 exports.saveRefreshToken = function (token, clientId, expires, userId, callback) {
   var refreshToken = new OAuthRefreshToken({
     token: token,
-    client_id: clientId,
+    clientId: clientId,
     holder: userId,
     expires: expires
   });
