@@ -1,13 +1,19 @@
-const server = require('./server')
+const { routeMethods, start } = require('./server')
 const mw = require('./middleware')
 const db = require('./db')
 
+require('./models')
+
 class RouteMaker {
-    constructor(router) {
-        for (let method of server.routeMethods) {
-            this[method] = (...args) => {
-                router.apply(args)
-            }
+    constructor(server, authorize = true) {
+        for (let method of routeMethods) {
+            this[method] = (route, ...args) => {
+                if (!authorize) {
+                    server[method].apply([route].concat(args))
+                } else {
+                    server[method].apply(server, [route].concat([server.oauth.authorise()]).concat(args))
+                }  
+            } 
         }
     }
 }
@@ -15,9 +21,11 @@ class RouteMaker {
 class App {
     constructor({mongoUri, port}) {
         db.init(mongoUri)
-        this.routes = server.start({
+        const server = start({
             port
         })
+        this.routes = new RouteMaker(server)
+        this.publicRoutes = new RouteMaker(server, false)
         this.mw = mw
     }
 }

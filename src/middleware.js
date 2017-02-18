@@ -6,17 +6,6 @@ const moment = require('moment');
 
 const API_LIST_LIMIT = 10;
 
-// TODO need to access models somehow. These tools should probably be retrieved from the app
-// due to the need of bootstraping
-
-// TODO create and use configuration for things like API_LIST_LIMIT
-
-// the configuration may also include what case to use and id format 
-// the id is by default _id but may be changed in views, query parser and redundant fields to be just id which is cleaner
-
-// TODO make it possible to add plugins for things like emailing. 
-
-
 function hasRedundancyPlugin(model) {
   return model.schema.methods.hasOwnProperty('update');
 }

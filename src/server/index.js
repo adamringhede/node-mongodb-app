@@ -7,7 +7,7 @@ const restify = require('restify');
 const jsend = require('./jsend');
 const mongoose = require('mongoose')
 
-const routeMethods = ['post', 'get', 'put', 'delete', 'opts', 'use', 'pre']
+const routeMethods = ['post', 'get', 'put', 'delete', 'opts']
 exports.routeMethods = routeMethods
 
 exports.start = function ({port = 8000}) {
@@ -64,13 +64,11 @@ exports.start = function ({port = 8000}) {
     
     server.oauth = oauthServer({
         model: oauthHooks,
-        grants: ['password'],
+        grants: ['authorization_code', 'password', 'refresh_token', 'client_credentials'],
         debug: true
     });
 
     server.post('/oauth/token', server.oauth.grant());
-
-    server.use(server.oauth.authorise());
 
     server.listen(port);
     console.log("API listening on port " + port);
