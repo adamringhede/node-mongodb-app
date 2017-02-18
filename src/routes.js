@@ -11,7 +11,6 @@ module.exports = app => {
       _: 'username password email',
       admin: 'username password email role'
     }),
-    //$.createAccessToken('account', Models.Client.DEV_PORTAL),
     $.output('account', (model, req) => {
       return {
         _id: model._id,
