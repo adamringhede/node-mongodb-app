@@ -2,6 +2,7 @@
 const views = {
   Article: (model, req) => {
       return {
+          _id: model._id,
           title: model.title,
           body: model.body,
           author: model.author
