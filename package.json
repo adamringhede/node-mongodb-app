@@ -1,0 +1,25 @@
+{
+  "name": "@adamringhede/mongodb-app",
+  "version": "1.0.0",
+  "description": "A framework for restful services with MongoDB",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "async": "^2.1.4",
+    "flat": "^2.0.1",
+    "mongoose": "^4.8.3",
+    "oauth2-server-restify": "git+https://github.com/adamringhede/node-oauth2-server-restify.git#7f83e928314c8a276bdd3fc201dfda5b5cb5d429",
+    "pow-mongoose-fixtures": "^0.3.0",
+    "object-path": "^0.11.3",
+    "objectid": "^3.2.1",
+    "restify": "^4.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Ringhede",
+  "license": "ISC"
+}
