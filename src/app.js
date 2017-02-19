@@ -23,11 +23,11 @@ class RouteMaker {
 class App {
   constructor({mongoUri, port}) {
     db.init(mongoUri)
-    const server = start({
+    this.server = start({
       port
     })
-    this.routes = new RouteMaker(server)
-    this.publicRoutes = new RouteMaker(server, false)
+    this.routes = new RouteMaker(this.server)
+    this.publicRoutes = new RouteMaker(this.server, false)
     this.mw = mw
     defaultRoutes(this)
   }
