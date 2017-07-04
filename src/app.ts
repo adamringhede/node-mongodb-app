@@ -52,8 +52,6 @@ export class App {
   }
 }
 
-module.exports = App
-
 function wrapMiddleware(fun) {
   if (typeof fun === 'function') {
     const funString = fun.toString().trim()
