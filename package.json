@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A framework for restful services with MongoDB",
   "main": "dist/index.js",
+  "typings": "dist/index",
   "directories": {
     "example": "examples"
   },
