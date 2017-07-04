@@ -2,11 +2,14 @@
   "name": "@adamringhede/mongodb-app",
   "version": "1.0.0",
   "description": "A framework for restful services with MongoDB",
-  "main": "index.js",
+  "main": "dist/index.js",
   "directories": {
     "example": "examples"
   },
   "dependencies": {
+    "@types/mongoose": "^4.7.18",
+    "@types/node": "^8.0.7",
+    "@types/restify": "^4.3.4",
     "async": "^2.1.4",
     "flat": "^2.0.1",
     "mongoose": "^4.8.3",
@@ -19,7 +22,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "author": "Adam Ringhede",
   "license": "ISC"

@@ -1,20 +1,21 @@
 const mongoose = require('mongoose')
 const Fixtures = require('pow-mongoose-fixtures')
 
-exports.connected = false
+export let connected = false
 
-exports.connection = null
+export let connection = null
 mongoose.Promise = global.Promise
 
-exports.init = (uri) => {
-    if (exports.connected) return 
+export const init = (uri) => {
+    if (connected) return 
     mongoose.Promise = global.Promise
     mongoose.connect(uri)
-    exports.connection = mongoose.connection
-    exports.connected = true
+    connection = mongoose.connection
+    connected = true
 }  
 
-exports.loadFixtures = function (fixtures, callback) {
+
+export const loadFixtures = function (fixtures, callback) {
   var f = {};
   Fixtures.load(fixtures, mongoose.connection, function (err) {
     if (err) throw err;

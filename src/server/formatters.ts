@@ -1,17 +1,20 @@
+import * as restify from 'restify'
+
 module.exports = {
-  'application/json': function ( req, res, body, cb) {
+  'application/json': function ( req: restify.Request, res: restify.Response|any, body: any, cb) {
       // Copied from restify/lib/formatters/json.js
       if (res.suppress_codes) {
         res.statusCode = 200;
       }
       if ( body instanceof Error ) {
+          var body: any = body
           // snoop for RestError or HttpError, but don't rely on
           // instanceof
           formatError(body);
 
           if (res.suppress_codes) {
             res.statusCode = 200;
-          } else {
+          } else  {
             res.statusCode = body.statusCode || 500;
           }
 

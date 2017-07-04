@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-const async = require('async');
-const restify = require('restify');
-const OAuth = require('./server/oauth');
-const moment = require('moment');
+import * as mongoose from 'mongoose'
+import * as async from 'async'
+import * as restify from 'restify'
+import * as OAuth from './server/oauth'
+import * as moment from 'moment'
 
 const API_LIST_LIMIT = 10;
 
@@ -10,27 +10,27 @@ function hasRedundancyPlugin(model) {
   return model.schema.methods.hasOwnProperty('update');
 }
 
-exports.restrict = function (roles) {
+export const restrict = function (roles) {
   return function (req, res, next) {
     if (roles.indexOf(req.user.role) < 0) {
-      next(new restify.errors.NotAuthorizedError("The role '" + req.user.role + "' does not have access to this endpoint"));
+      next(new restify.NotAuthorizedError("The role '" + req.user.role + "' does not have access to this endpoint"));
     } else {
       next();
     }
   }
 };
 
-exports.forbid = function (roles, fn) {
+export const forbid = function (roles, fn) {
   return function (req, res, next) {
     if (roles.indexOf(req.user.role) >= 0 && fn(req) == true) {
-      next(new restify.errors.NotAuthorizedError());
+      next(new restify.NotAuthorizedError());
     } else {
       next();
     }
   }
 };
 
-exports.output = function (resource, view, populate = []) {
+export const output = function (resource, view, populate = []) {
   return function (req, res, next) {
     async.each(populate, (ref, callback) => {
       req.resources[resource].populate(ref, callback)
@@ -42,7 +42,7 @@ exports.output = function (resource, view, populate = []) {
   }
 };
 
-exports.create = function (param, type, permissions, defaults) {
+export const create = function (param, type, permissions, defaults?): any {
   return function (req, res, next) {
     var role;
     if (req.user && req.user.role) {
@@ -80,7 +80,7 @@ exports.create = function (param, type, permissions, defaults) {
   }
 };
 
-exports.update = function (param, permissions) {
+export const update = function (param, permissions) {
   return function (req, res, next) {
     var role;
     if (req.user) {
@@ -120,15 +120,15 @@ exports.update = function (param, permissions) {
   }
 }
 
-exports.roleDefault = function (role, defaults) {
+export const roleDefault = function (role, defaults) {
   return function (req, res, next) {
     if (req.user.role == role) {
-      exports.default(defaults)(req, res, next)
+      defaults(defaults)(req, res, next)
     }
   }
 }
 
-exports.default = function (defaults) {
+export function defaults(defaults) {
   return function (req, res, next) {
     if (typeof defaults == 'function') {
       defaults = defaults(req)
@@ -141,7 +141,7 @@ exports.default = function (defaults) {
 }
 
 
-exports.outputPage = function (resource, view) {
+export const outputPage = function (resource, view) {
   return function (req, res, next) {
     var models = req.resources[resource];
     var views = [];
@@ -159,7 +159,7 @@ exports.outputPage = function (resource, view) {
   }
 }
 
-exports.loadList = function (param, type, query, populate = []) {
+export const loadList = function (param, type, query, populate = []) {
   return function (req, res, next) {
     if (!req.resources) req.resources = {};
     // Set defaults
@@ -171,7 +171,7 @@ exports.loadList = function (param, type, query, populate = []) {
     }
     // Use the the model (type) to determine what type the conditions have.
     var conditions = {};
-    var schema = mongoose.model(type).schema.tree;
+    var schema = mongoose.model(type).schema.obj;
     for (var attribute in req.query) {
       if (!req.query.hasOwnProperty(attribute)) continue;
       if (schema.hasOwnProperty(attribute.split('.')[0])) {
@@ -229,7 +229,7 @@ exports.loadList = function (param, type, query, populate = []) {
   }
 };
 
-exports.load = function (types) {
+export const load = function (types) {
   return function (req, res, next) {
     if (!req.resources) req.resources = {};
     async.forEachOf(types, function (type, param, callback) {
@@ -245,7 +245,7 @@ exports.load = function (types) {
     }, function (err) {
       if (err) {
         if (typeof err === 'string') {
-          next(new restify.errors.ResourceNotFoundError('Could not find ' + err));
+          next(new restify.ResourceNotFoundError('Could not find ' + err));
         } else {
           next(err)
         }
@@ -255,7 +255,7 @@ exports.load = function (types) {
   }
 };
 
-exports.createAccessToken = function (param, client_id, months = 1) {
+export const createAccessToken = function (param, client_id, months = 1) {
   return function (req, res, next) {
     var account;
     if (param == '@') {
@@ -274,7 +274,7 @@ exports.createAccessToken = function (param, client_id, months = 1) {
   }
 };
 
-exports.require = function (required_fields) {
+export const requires = function (required_fields) {
   return function (req, res, next) {
     var fields = required_fields.split(' ');
     var missing = [];
@@ -284,14 +284,14 @@ exports.require = function (required_fields) {
       }
     }
     if (missing.length > 0) {
-      next(new restify.errors.MissingParameterError('Missing ' + missing.join(', ')));
+      next(new restify.MissingParameterError('Missing ' + missing.join(', ')));
     } else {
       next();
     }
   }
 };
 
-exports.success = function (message) {
+export const success = function (message) {
   return function (req, res, next) {
     if (typeof message == 'function') {
       res.success(200, message(req));
@@ -310,7 +310,7 @@ function getQuery(req, type, param) {
   return query;
 }
 
-exports.delete = function (param, type, message) {
+export function remove(param, type, message) {
   return function (req, res, next) {
     mongoose.model(type.split('.')[0]).find(getQuery(req, type, param)).remove(function (err) {
       if (err) throw err;

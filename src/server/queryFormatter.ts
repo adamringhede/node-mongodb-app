@@ -3,7 +3,7 @@ const flatten = require('flat');
 module.exports = function () {
   return function (req, res, next) {
     req.query = flatten(req.query);
-    for (key in req.query) {
+    for (let key in req.query) {
       if (typeof req.query[key] !== 'string') {
         continue;
       }

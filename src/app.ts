@@ -1,11 +1,26 @@
-const { routeMethods, start } = require('./server')
-const mw = require('./middleware')
-const db = require('./db')
-const defaultRoutes = require('./routes')
+import { routeMethods, start } from './server'
+import * as restify from 'restify'
+import * as mw from './middleware'
+import * as db from './db'
+import * as defaultRoutes from './routes'
 
-require('./models')
+import './models'
 
-class RouteMaker {
+export interface IAppConfig {
+  mongoUri: string
+  port: number
+} 
+
+export type RequestHandler = (req: restify.Request, res?: restify.Response, next?: restify.Next) => any;
+export type RouteHandler = (route: string|RegExp, ...args: Array<RequestHandler>) => any
+
+export class RouteMaker {
+  post: RouteHandler
+  get: RouteHandler
+  put: RouteHandler
+  delete: RouteHandler
+  opts: RouteHandler
+
   constructor(server, authorize = true) {
     for (let method of routeMethods) {
       this[method] = (route, ...args) => {
@@ -20,16 +35,20 @@ class RouteMaker {
   }
 }
 
-class App {
-  constructor({mongoUri, port}) {
+export class App {
+  server: restify.Server
+  routes: RouteMaker
+  publicRoutes: RouteMaker
+  mw = mw
+
+  constructor({mongoUri, port}: IAppConfig) {
     db.init(mongoUri)
     this.server = start({
       port
     })
     this.routes = new RouteMaker(this.server)
     this.publicRoutes = new RouteMaker(this.server, false)
-    this.mw = mw
-    defaultRoutes(this)
+    defaultRoutes.default(this)
   }
 }
 

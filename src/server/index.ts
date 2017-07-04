@@ -7,10 +7,9 @@ const restify = require('restify');
 const jsend = require('./jsend');
 const mongoose = require('mongoose')
 
-const routeMethods = ['post', 'get', 'put', 'delete', 'opts']
-exports.routeMethods = routeMethods
+export const routeMethods = ['post', 'get', 'put', 'delete', 'opts']
 
-exports.start = function ({port = 8000}) {
+export function start({port = 8000}) {
   var server = restify.createServer({
     name: 'app',
     formatters: formatters
@@ -46,10 +45,10 @@ exports.start = function ({port = 8000}) {
     if (!req.body) {
       req.body = {};
     }
-    for (param in req.params) {
+    for (let param in req.params) {
       if (!req.body[param]) req.body[param] = req.params[param];
     }
-    for (key in req.body) {
+    for (let key in req.body) {
       if (!req.params[key]) req.params[key] = req.body[key];
     }
     next();
@@ -88,7 +87,7 @@ function validateModels() {
     `)
   }
 }
-
+/*
 function applyRoutes(routes, server) {
   if (routes != null) {
     for (let method of routeMethods) {
@@ -100,3 +99,4 @@ function applyRoutes(routes, server) {
     }
   }
 }
+*/
