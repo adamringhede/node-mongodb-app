@@ -64,7 +64,7 @@ export function findAccountWithCredentials(input, callback) {
     username: input.username,
     password_hash: hash
   };
-  return this.findOne(query, function(err, model) {
+  return Account.findOne(query, function(err, model) {
     return typeof callback === "function" ? callback(err, model) : void 0;
   });
 }
